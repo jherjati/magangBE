@@ -17,14 +17,14 @@ fastify.get("/", async (request, reply) => {
   reply.sendFile("index.html");
 });
 
-fastify.get("/apaya", async (request, reply) => {
-  return { hello: "apaya" };
+fastify.get("/sapa", async (request, reply) => {
+  reply.send({ hello: request.query.nama || "anonymous" });
 });
 
 // Run the server!
 const start = async () => {
   try {
-    await fastify.listen(process.env.PORT, "0.0.0.0");
+    await fastify.listen(process.env.PORT || 5000, "0.0.0.0");
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
