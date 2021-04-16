@@ -3,15 +3,20 @@ const fastify = require("fastify")({ logger: true });
 
 // Register plugins
 fastify.register(require("fastify-static"), require("./config/static").public);
-fastify.register(require("fastify-static"), require("./config/static").assets);
-fastify.register(require("fastify-static"), require("./config/static").forms);
+fastify.register(
+  require("fastify-static"),
+  require("./config/static").publicAssets
+);
+fastify.register(
+  require("fastify-static"),
+  require("./config/static").publicForms
+);
 
-// Declare a route
+// Declare routes
 fastify.get("/", async (request, reply) => {
-  reply.sendFile("index.html"); // serving path.join(__dirname, 'public', 'index.html') directly
+  reply.sendFile("index.html");
 });
 
-// Declare a route
 fastify.get("/apaya", async (request, reply) => {
   return { hello: "apaya" };
 });
