@@ -1,7 +1,7 @@
 // Require the framework and instantiate it
 const fastify = require("fastify")({ logger: true });
 
-// Register plugins
+// Register core plugins
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(
   require("fastify-static"),
@@ -12,14 +12,8 @@ fastify.register(
   require("./config/static").publicForms
 );
 
-// Declare routes
-fastify.get("/", async (request, reply) => {
-  reply.sendFile("index.html");
-});
-
-fastify.get("/sapa", async (request, reply) => {
-  reply.send({ hello: request.query.nama || "anonymous" });
-});
+// Register custom routes (route included)
+fastify.register(require("./routes/static"));
 
 // Run the server!
 const start = async () => {
