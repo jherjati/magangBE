@@ -1,4 +1,4 @@
 module.exports = {
-  connectionString: process.env.PGSTRING,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 };
