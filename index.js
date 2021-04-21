@@ -1,11 +1,15 @@
 // Require the framework and instantiate it
-const fastify = require("fastify")({ logger: true });
+const fastify = require("fastify")({ logger: false });
 
 if (process.env.NODE_ENV !== "production")
   require("dotenv").config(require("./config/env").options.dotenv);
 
 // Register core plugins
-fastify.register(require("fastify-env"), require("./config/env").options);
+fastify.register(require("fastify-env"), {
+  ...require("./config/env").options,
+  dotenv: false,
+});
+fastify.register(require("fastify-postgres"), require("./config/postgres"));
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(require("point-of-view"), {
   engine: {

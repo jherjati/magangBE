@@ -3,9 +3,12 @@ module.exports = {
     confKey: "config", // optional, default: 'config'
     schema: {
       type: "object",
-      required: ["PORT"],
+      required: ["PORT", "PGSTRING"],
       properties: {
         PORT: {
+          type: "string",
+        },
+        PGSTRING: {
           type: "string",
         },
       },

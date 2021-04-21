@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": false
+                }
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "heroku",
+            "group": "bootcamp",
+            "connectString": "postgres://oulmnjsddkysuo:2cf57df096ffebdb391ebead13d1fa12952c41d62097169c9c6cf5eb3c93354d@ec2-54-224-120-186.compute-1.amazonaws.com:5432/d5mhl8962iqctm"
+        }
+    ]
+}
