@@ -39,9 +39,7 @@ DROP TABLE profiles;
 --@block
 INSERT INTO profiles (fltr, imgSrc, title, summary, galleryHref, galleryTitle)
 VALUES 
-    ('filter-app', 'assets/img/portfolio/portfolio-1.jpg', 'App 1', 'App', 'assets/img/portfolio/portfolio-1.jpg', 'App 1'),
-    ('filter-web', 'assets/img/portfolio/portfolio-2.jpg', 'Web 3', 'Web', 'assets/img/portfolio/portfolio-2.jpg', 'Web 3'),
-    ('filter-app', 'assets/img/portfolio/portfolio-3.jpg', 'App 2', 'App', 'assets/img/portfolio/portfolio-3.jpg', 'App 2')
+    ('filter-app', 'assets/img/portfolio/portfolio-1.jpg', 'App 1', 'App', 'assets/img/portfolio/portfolio-1.jpg', 'App 1')
 RETURNING id ;
 
 --@block
@@ -55,5 +53,5 @@ SET
 WHERE id = 4;
 
 --@block
-DELETE FROM profiles WHERE id!=1;
+DELETE FROM profiles WHERE id=1;
 
