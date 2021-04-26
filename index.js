@@ -13,12 +13,22 @@ fastify.register(require("fastify-env"), {
 fastify.register(require("fastify-postgres"), require("./config/postgres"));
 fastify.register(require("fastify-static"), require("./config/static").public);
 fastify.register(require("point-of-view"), require("./config/view"));
+fastify.register(require("fastify-jwt"), require("./config/jwt"));
 fastify.register(require("fastify-swagger"), require("./config/swagger"));
+
+fastify.decorate("authenticate", async function (req, reply) {
+  try {
+    await req.jwtVerify();
+  } catch (err) {
+    reply.send(err);
+  }
+});
 
 // Register custom routes (route included)
 fastify.register(require("./routes/static"));
 fastify.register(require("./routes/ssr"));
 fastify.register(require("./routes/profile"), { prefix: "/api/profiles" });
+fastify.register(require("./routes/auth"), { prefix: "/api/auth" });
 
 // Run the server!
 fastify.ready((err) => {
