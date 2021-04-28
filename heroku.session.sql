@@ -74,4 +74,4 @@ SET
 WHERE id = 4;
 
 --@block
-DELETE FROM user_auth WHERE email='string';
+DELETE FROM user_auth WHERE true;

@@ -1,4 +1,5 @@
 const { BasicMessage } = require("../schema");
+const argon2 = require("argon2");
 
 async function routes(fastify, options) {
   fastify.post(
@@ -27,12 +28,13 @@ async function routes(fastify, options) {
     async (req, reply) => {
       try {
         const { email, password } = req.body;
+        const hashedPassword = await argon2.hash(password);
         const { rows } = await fastify.pg.query(
           ` INSERT INTO user_auth (email, hashed_password)
             VALUES 
                 ($1, $2)
             RETURNING email;`,
-          [email, password]
+          [email, hashedPassword]
         );
         return { token: fastify.jwt.sign(rows[0]) };
       } catch (err) {
@@ -76,7 +78,9 @@ async function routes(fastify, options) {
         );
 
         if (rows.length === 0) throw Error("Email tidak terdaftar");
-        if (password !== rows[0].hashed_password) throw Error("Password salah");
+
+        const isMatch = await argon2.verify(rows[0].hashed_password, password);
+        if (!isMatch) throw Error("Password salah");
 
         return { token: fastify.jwt.sign({ email }) };
       } catch (err) {
