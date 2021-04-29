@@ -1,7 +1,17 @@
-const { request } = require("undici");
 const { BasicMessage } = require("../schema");
+const nodemailer = require("nodemailer");
 
 async function routes(fastify, options) {
+  let transporter = nodemailer.createTransport({
+    host: "srv80.niagahoster.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: fastify.env.BRAGA_EMAIL,
+      pass: fastify.env.BRAGA_PASS,
+    },
+  });
+
   fastify.post(
     "/",
     {
@@ -10,10 +20,19 @@ async function routes(fastify, options) {
         body: {
           type: "object",
           properties: {
-            name: { type: "object" },
-            email: { type: "object" },
-            subject: { type: "object" },
-            message: { type: "object" },
+            name: { type: "object", properties: { value: { type: "string" } } },
+            email: {
+              type: "object",
+              properties: { value: { type: "string" } },
+            },
+            subject: {
+              type: "object",
+              properties: { value: { type: "string" } },
+            },
+            message: {
+              type: "object",
+              properties: { value: { type: "string" } },
+            },
           },
         },
         response: {
@@ -23,18 +42,22 @@ async function routes(fastify, options) {
     },
     async (req, reply) => {
       try {
-        const { name, email, subject, message } = req.body;
+        const {
+          name: { value: nameValue },
+          email,
+          subject,
+          message,
+        } = req.body;
 
-        // TODO : nodemailer
-
-        reply.status(200).send({
-          name: name.value,
-          email: email.value,
+        let info = await transporter.sendMail({
+          from: `Braga Email Service <${fastify.env.BRAGA_EMAIL}>`,
+          to: "jherjati@gmail.com",
           subject: subject.value,
-          message: message.value,
+          text: `You got a message from ${nameValue} (${email.value}). The message is : ${message.value}`,
         });
+
+        reply.send(`Message sent: ${info.messageId}`);
       } catch (err) {
-        console.log(err);
         return err;
       }
     }
