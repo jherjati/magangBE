@@ -1,14 +1,15 @@
 // Require the framework and instantiate it
 const fastify = require("fastify")({ logger: false });
 fastify.decorate("env", require("env-schema")(require("./config/env")));
+fastify.register(require("fastify-multipart"), { attachFieldsToBody: true });
 
 // Register core plugins
 fastify.register(require("fastify-postgres"), require("./config/postgres"));
 fastify.register(require("fastify-swagger"), require("./config/swagger"));
 fastify.register(require("fastify-static"), require("./config/static"));
 fastify.register(require("fastify-helmet"), require("./config/helmet"));
-fastify.register(require("fastify-cors"), require("./config/cors"));
 fastify.register(require("point-of-view"), require("./config/view"));
+fastify.register(require("fastify-cors"), require("./config/cors"));
 fastify.register(require("fastify-jwt"), require("./config/jwt"));
 
 fastify.decorate("authenticate", async function (req, reply) {
@@ -24,6 +25,7 @@ fastify.register(require("./routes/static"));
 fastify.register(require("./routes/ssr"));
 fastify.register(require("./routes/profile"), { prefix: "/api/profiles" });
 fastify.register(require("./routes/auth"), { prefix: "/api/auth" });
+fastify.register(require("./routes/mail"), { prefix: "/api/mail" });
 fastify.register(require("./routes/placeholder"), {
   prefix: "/api/placeholder",
 });
